@@ -1,0 +1,95 @@
+##################################################
+# Variables
+@BASE_URL = https://69060c47ee3d0d14c134982d.mockapi.io
+@USER_ID = 2
+@TRANSACTION_ID = 3
+
+##################################################
+# Users Requests
+
+### Get all users
+GET {{BASE_URL}}/users
+Content-Type: application/json
+
+###
+
+### Get a user by ID
+GET {{BASE_URL}}/users/{{USER_ID}}
+Content-Type: application/json
+
+###
+
+### Create a new user
+POST {{BASE_URL}}/users
+Content-Type: application/json
+
+{
+  "user_name": "nade jaa",
+  "first_name": "nade",
+  "last_name": "jaa",
+  "profile_img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQoFRQjM-wM_nXMA03AGDXgJK3VeX7vtD3ctA&s",
+  "pin": "Sa1234",
+  "balance": 1600,
+  "birthday": "2002-08-04"
+}
+
+###
+
+### Update an existing user
+PUT {{BASE_URL}}/users/{{USER_ID}}
+Content-Type: application/json
+
+{
+  "first_name": "Sadeg Updated",
+  "balance": 2000
+}
+
+###
+
+### Delete a user
+DELETE {{BASE_URL}}/users/{{USER_ID}}
+Content-Type: application/json
+
+##################################################
+# Transactions Requests
+
+### Get all transactions for a user
+GET {{BASE_URL}}/users/{{USER_ID}}/transactions
+Content-Type: application/json
+
+###
+
+### Get a transaction by ID for a user
+GET {{BASE_URL}}/users/{{USER_ID}}/transactions/{{TRANSACTION_ID}}
+Content-Type: application/json
+
+###
+
+### Create a new transaction for a user
+POST {{BASE_URL}}/users/{{USER_ID}}/transactions
+Content-Type: application/json
+
+{
+  "type": "Withdraw",
+  "amount": 100,
+  "currency": "ILS",
+  "date": "2025-10-24T10:00:00Z"
+}
+
+###
+
+### Update a transaction for a user
+PUT {{BASE_URL}}/users/{{USER_ID}}/transactions/{{TRANSACTION_ID}}
+Content-Type: application/json
+
+{
+  "type": "Deposit",
+  "amount": 500,
+  "currency": "ILS"
+}
+
+###
+
+### Delete a transaction for a user
+DELETE {{BASE_URL}}/users/{{USER_ID}}/transactions/{{TRANSACTION_ID}}
+Content-Type: application/json

@@ -1,35 +1,38 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { lazy, Suspense } from 'react';
+import { Routes, Route } from 'react-router-dom';
+import Layout from './Pages/Layout';
+
+const Login = lazy(() => import('./Pages/login'));
+const Dashboard = lazy(() => import('./Pages/dashboard'));
+const Deposit = lazy(() => import('./Pages/deposit'));
+const WithDraw = lazy(() => import('./Pages/withdraw'));
+const History = lazy(() => import('./Pages/history'));
+const WatchList = lazy(() => import('./Pages/watchlist'));
+const Settings = lazy(() => import('./Pages/settings'));
+const NotFound = lazy(() => import('./Pages/not_found'));
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Suspense fallback={<p>Loading...</p>}>
+      <Routes>
+        {/* Login page does not use the main layout */}
+        <Route path="/" element={<Login />} />
+
+        {/* All other pages use the Layout */}
+        <Route element={<Layout />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/deposit" element={<Deposit />} />
+          <Route path="/withdraw" element={<WithDraw />} />
+          <Route path="/history" element={<History />} />
+          <Route path="/watchlist" element={<WatchList />} />
+          <Route path="/settings" element={<Settings />} />
+        </Route>
+
+        {/* 404 Not Found */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </Suspense>
+  );
 }
 
-export default App
+export default App;
