@@ -5,8 +5,8 @@ import ProtectedRoute from './Component/ProtectedRoute';
 
 const Login = lazy(() => import('./Pages/login'));
 const Dashboard = lazy(() => import('./Pages/dashboard'));
-const Deposit = lazy(() => import('./Pages/deposit'));
-const WithDraw = lazy(() => import('./Pages/withdraw'));
+const Deposit = lazy(() => import('./Pages/Deposit'));
+const WithDraw = lazy(() => import('./Pages/Withdraw'));
 const History = lazy(() => import('./Pages/history'));
 const WatchList = lazy(() => import('./Pages/watchlist'));
 const Settings = lazy(() => import('./Pages/settings'));

@@ -1,3 +1,9 @@
-export default function withdraw() {
-  return <div>withdraw</div>;
+function withdraw() {
+  return (
+    <div>
+      withdraw
+    </div>
+  )
 }
+
+export default withdraw
