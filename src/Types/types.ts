@@ -24,6 +24,12 @@ export type balanceStore = {
   setBalance: (b: number) => void;
 };
 
+export interface TransactionType {
+  processType: "Deposit" | "Withdraw";
+  onConfirm: (amount: number) => Promise<void>;
+  icon: React.ElementType;
+}
+
 export interface ToastProps {
   type?: "success" | "error";
   children: React.ReactNode;
@@ -36,5 +42,5 @@ export type popUpType = {
   onConfirm: () => void;
   onClose: () => void;
   processType: string;
-  isLoadingDeposit: boolean;
+  isLoading: boolean;
 };
