@@ -1,8 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { useAuthStore } from "../Context/authSContext";
-import { useNavigate } from "react-router-dom";
-import Header from "../Component/Header";
-import { BanknoteArrowUp, BanknoteArrowDown, RotateCcw, TrendingUp, TrendingDown, Wallet } from 'lucide-react';
+import  { useEffect, useState } from 'react';
+import { useAuthStore } from '../Context/authSContext';
+import { useNavigate } from 'react-router-dom';
+import Header from '../Component/Header';
+import {
+  BanknoteArrowUp,
+  BanknoteArrowDown,
+  RotateCcw,
+  TrendingUp,
+  TrendingDown,
+  Wallet,
+} from 'lucide-react';
 import Confetti from 'react-confetti';
 
 interface Transaction {
@@ -21,27 +28,26 @@ export default function Dashboard() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [balance, setBalance] = useState<number>(0);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const [showConfirm, setShowConfirm] = useState(false);
   const [birthdayModal, setBirthdayModal] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
-   
-  // Calculate 
+
+  // Calculate
   const summary = {
     deposits: transactions
-      .filter(tx => tx.type === 'Deposit')
+      .filter((tx) => tx.type === 'Deposit')
       .reduce((sum, tx) => sum + tx.amount, 0),
     withdrawals: transactions
-      .filter(tx => tx.type === 'Withdraw')
+      .filter((tx) => tx.type === 'Withdraw')
       .reduce((sum, tx) => sum + tx.amount, 0),
-    balance: balance
+    balance: balance,
   };
-console.log("Summary:", transactions);
+  console.log('Summary:', transactions);
   const fetchUserData = async () => {
     if (!user) return;
     try {
       setLoading(true);
-      
 
       const [userRes, txRes] = await Promise.all([
         fetch(`https://69060c47ee3d0d14c134982d.mockapi.io/users/${user.id}`),
@@ -52,14 +58,14 @@ console.log("Summary:", transactions);
         setTransactions([]);
       }
 
-      if (!userRes.ok) throw new Error("Failed to fetch data");
+      if (!userRes.ok) throw new Error('Failed to fetch data');
 
       const userData = await userRes.json();
       const today = new Date();
       const todayKey = `birthdayShown-${today.toISOString().slice(0, 10)}`;
       const birthDate = userData.birthday ? new Date(userData.birthday) : null;
-      console.log("User birthday:", birthDate);
-    
+      console.log('User birthday:', birthDate);
+
       if (
         birthDate instanceof Date &&
         !isNaN(birthDate.getTime()) &&
@@ -71,13 +77,13 @@ console.log("Summary:", transactions);
           setBirthdayModal(true);
           setShowConfetti(true);
         }, 1000);
-        localStorage.setItem(todayKey, "true");
-        console.log("Birthday modal set to show", birthdayModal);
+        localStorage.setItem(todayKey, 'true');
+        console.log('Birthday modal set to show', birthdayModal);
       }
       const transactionsData = await txRes.json();
-      
+
       setBalance(userData.balance);
-      
+
       setTransactions(
         transactionsData
           .sort(
@@ -87,12 +93,12 @@ console.log("Summary:", transactions);
           .slice(0, 5)
       );
 
-      // Birthday 
-      
-console.log ("birthdate modal:", birthdayModal)
+      // Birthday
+
+      console.log('birthdate modal:', birthdayModal);
     } catch (err) {
       console.error(err);
-    //  setError("⚠️ Failed to fetch user data");
+      //  setError("⚠️ Failed to fetch user data");
     } finally {
       setLoading(false);
     }
@@ -109,17 +115,15 @@ console.log ("birthdate modal:", birthdayModal)
       setLoading(true);
 
       await fetch(`https://69060c47ee3d0d14c134982d.mockapi.io/users/${user.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ balance: 0 }),
       });
-
-     
 
       await fetchUserData();
     } catch (err) {
       console.error(err);
-      alert("⚠️ Failed to reset balance or transactions");
+      alert('⚠️ Failed to reset balance or transactions');
     } finally {
       setShowConfirm(false);
       setLoading(false);
@@ -133,14 +137,14 @@ console.log ("birthdate modal:", birthdayModal)
       </div>
     );
   }
-    if (loading) {
+  if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
       </div>
     );
   }
-console.log("birthday modal render:", birthdayModal)
+  console.log('birthday modal render:', birthdayModal);
   return (
     <div className="min-h-screen bg-gradient-to-br ">
       {showConfetti && (
@@ -150,7 +154,7 @@ console.log("birthday modal render:", birthdayModal)
           onConfettiComplete={() => setShowConfetti(false)}
         />
       )}
-      
+
       <Header
         username={user.user_name}
         profileImage={user.profile_img}
@@ -174,9 +178,7 @@ console.log("birthday modal render:", birthdayModal)
               </div>
             </div>
             <div className="mt-4 pt-4 border-t border-green-50">
-              <p className="text-xs text-green-500">
-                All-time deposit transactions
-              </p>
+              <p className="text-xs text-green-500">All-time deposit transactions</p>
             </div>
           </div>
 
@@ -194,9 +196,7 @@ console.log("birthday modal render:", birthdayModal)
               </div>
             </div>
             <div className="mt-4 pt-4 border-t border-red-50">
-              <p className="text-xs text-red-500">
-                All-time withdrawal transactions
-              </p>
+              <p className="text-xs text-red-500">All-time withdrawal transactions</p>
             </div>
           </div>
 
@@ -205,7 +205,11 @@ console.log("birthday modal render:", birthdayModal)
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-blue-500 mb-1">Current Balance</p>
-                <p className={`text-2xl font-bold ${summary.balance>0?'text-green-500':'text-red-200'}`}>
+                <p
+                  className={`text-2xl font-bold ${
+                    summary.balance > 0 ? 'text-green-500' : 'text-red-200'
+                  }`}
+                >
                   {summary.balance.toLocaleString('en-IL')} ILS
                 </p>
               </div>
@@ -214,23 +218,19 @@ console.log("birthday modal render:", birthdayModal)
               </div>
             </div>
             <div className="mt-4 pt-4 border-t border-blue-50">
-              <p className="text-xs text-blue-500">
-                Available for transactions
-              </p>
+              <p className="text-xs text-blue-500">Available for transactions</p>
             </div>
           </div>
         </div>
 
         {/* Services Section */}
         <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
-          <h2 className="text-2xl font-bold text-gray-800 mb-8 text-center">
-            Banking Services
-          </h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-8 text-center">Banking Services</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Deposit Button */}
             <button
-              onClick={() => navigate("/deposit")}
+              onClick={() => navigate('/deposit')}
               disabled={loading}
               className="group bg-gradient-to-r border border-green-100 text-green-500 p-8 rounded-2xl shadow-lg transform hover:scale-105 transition-all duration-200 hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
             >
@@ -245,7 +245,7 @@ console.log("birthday modal render:", birthdayModal)
 
             {/* Withdraw Button */}
             <button
-              onClick={() => navigate("/withdraw")}
+              onClick={() => navigate('/withdraw')}
               disabled={loading}
               className="group bg-gradient-to-r border border-red-100 text-red-500  p-8 rounded-2xl shadow-lg transform hover:scale-105 transition-all duration-200 hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
             >
@@ -283,9 +283,7 @@ console.log("birthday modal render:", birthdayModal)
                 <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
                   <RotateCcw className="w-8 h-8 text-red-600" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-800 mb-2">
-                  Reset Account?
-                </h3>
+                <h3 className="text-xl font-bold text-gray-800 mb-2">Reset Account?</h3>
                 <p className="text-gray-600 mb-6">
                   This will clear your balance This action cannot be undone.
                 </p>
@@ -302,7 +300,7 @@ console.log("birthday modal render:", birthdayModal)
                     disabled={loading}
                     className="flex-1 px-4 py-3 bg-gradient-to-r from-red-500 to-pink-600 text-white rounded-xl font-medium hover:from-red-600 hover:to-pink-700 transition-all disabled:opacity-50"
                   >
-                    {loading ? "Resetting..." : "Yes, Reset"}
+                    {loading ? 'Resetting...' : 'Yes, Reset'}
                   </button>
                 </div>
               </div>
@@ -316,9 +314,7 @@ console.log("birthday modal render:", birthdayModal)
             <div className="bg-gradient-to-r from-yellow-400 to-pink-500 rounded-2xl shadow-2xl p-8 max-w-md w-full transform animate-bounce-in">
               <div className="text-center text-white">
                 <div className="text-6xl mb-4">🎉</div>
-                <h3 className="text-2xl font-bold mb-2">
-                  Happy Birthday, {user.first_name}!
-                </h3>
+                <h3 className="text-2xl font-bold mb-2">Happy Birthday, {user.first_name}!</h3>
                 <p className="text-yellow-100 mb-6">
                   Wishing you a fantastic year ahead filled with prosperity and success!
                 </p>

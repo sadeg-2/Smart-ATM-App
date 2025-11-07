@@ -1,15 +1,14 @@
-import React, { useState } from "react";
-import { useAuthStore } from "../Context/authSContext";
-import { useNavigate } from "react-router-dom";
-import { 
-  Trash2, 
-  User, 
+import React, { useEffect, useState } from 'react';
+import { useAuthStore } from '../Context/authSContext';
+import {
+  Trash2,
+  User,
   RotateCcw,
   CheckCircle,
   AlertCircle,
   X,
   Calendar,
-  Receipt
+  Receipt,
 } from 'lucide-react';
 
 interface Toast {
@@ -20,30 +19,28 @@ interface Toast {
 
 export default function Settings() {
   const user = useAuthStore((state) => state.user);
-  const navigate = useNavigate();
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
   const [toasts, setToasts] = useState<Toast[]>([]);
 
-  // Toast 
+  // Toast
   const showToast = (type: Toast['type'], message: string) => {
     const id = Math.random().toString(36).substr(2, 9);
     const newToast: Toast = { id, type, message };
-    setToasts(prev => [...prev, newToast]);
-    
-   
+    setToasts((prev) => [...prev, newToast]);
+
     setTimeout(() => {
-      setToasts(prev => prev.filter(toast => toast.id !== id));
+      setToasts((prev) => prev.filter((toast) => toast.id !== id));
     }, 5000);
   };
 
   const removeToast = (id: string) => {
-    setToasts(prev => prev.filter(toast => toast.id !== id));
+    setToasts((prev) => prev.filter((toast) => toast.id !== id));
   };
   //get transaction count
   const [count, setCount] = useState<number | null>(null);
-  
-  React.useEffect(() => {
+
+  useEffect(() => {
     const fetchTransactionCount = async () => {
       if (!user) return;
 
@@ -53,15 +50,15 @@ export default function Settings() {
         );
         const data = await response.json();
         console.log(data);
-        if(data=='Not Found'){
+        if (data == 'Not Found') {
           setCount(0);
           return;
         }
         setCount(data.length);
-        
-        console.log("Transaction count:", data);
+
+        console.log('Transaction count:', data);
       } catch (error) {
-        console.error("Failed to fetch transaction count:", error);
+        console.error('Failed to fetch transaction count:', error);
       }
     };
 
@@ -74,34 +71,32 @@ export default function Settings() {
     try {
       setLoading(true);
 
-      // Reset balance 
+      // Reset balance
       await fetch(`https://69060c47ee3d0d14c134982d.mockapi.io/users/${user.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ balance: 0 }),
       });
 
       const transactionsResponse = await fetch(
         `https://69060c47ee3d0d14c134982d.mockapi.io/users/${user.id}/transactions`
       );
-      
+
       if (transactionsResponse.ok) {
         const transactions = await transactionsResponse.json();
-      
-        // Delete 
+
+        // Delete
         for (const tx of transactions) {
           await fetch(
             `https://69060c47ee3d0d14c134982d.mockapi.io/users/${user.id}/transactions/${tx.id}`,
-            { method: "DELETE" }
+            { method: 'DELETE' }
           );
         }
       }
 
       showToast('success', 'Account has been reset successfully!');
       setShowResetConfirm(false);
-      
-     
-
+      setCount(0);
     } catch (err) {
       console.error(err);
       showToast('error', 'Failed to reset account data. Please try again.');
@@ -110,8 +105,8 @@ export default function Settings() {
     }
   };
 
-  // Calculate 
-  const totalTransactions = count || 0; 
+  // Calculate
+  const totalTransactions = count || 0;
 
   if (!user) {
     return (
@@ -127,7 +122,6 @@ export default function Settings() {
       <div className="bg-white/80 backdrop-blur-lg border-b border-gray-200/50 shadow-sm">
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center space-x-4">
-           
             <div className="flex items-center space-x-3">
               <h1 className="text-3xl font-bold text-gray-800 flex items-center gap-3">
                 <User className="w-6 h-6 text-indigo-600" />
@@ -144,14 +138,14 @@ export default function Settings() {
           <div className="flex flex-col items-center text-center gap-4">
             {/* Profile Image */}
             <div className="relative">
-              <img 
-                src={user.profile_img} 
-                alt="Profile" 
+              <img
+                src={user.profile_img}
+                alt="Profile"
                 className="w-24 h-24 rounded-full shadow-lg border-4 border-white object-cover"
               />
               <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-400 border-2 border-white rounded-full"></div>
             </div>
-            
+
             {/* User Info */}
             <div className="space-y-2">
               <h2 className="text-2xl font-bold text-gray-800">
@@ -201,21 +195,21 @@ export default function Settings() {
             <RotateCcw className="w-5 h-5 text-red-600" />
             <h2 className="text-xl font-bold text-gray-800">Account Reset</h2>
           </div>
-          
+
           <div className="bg-red-50 border border-red-200 rounded-xl p-6">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
                 <h3 className="font-bold text-red-800 mb-2">Reset Your Account</h3>
                 <p className="text-red-600 text-sm">
-                  This will permanently reset your balance to zero and delete all transaction history.
-                  This action cannot be undone.
+                  This will permanently reset your balance to zero and delete all transaction
+                  history. This action cannot be undone.
                 </p>
               </div>
-              
+
               <button
                 onClick={() => setShowResetConfirm(true)}
                 disabled={loading}
-                className="flex items-center space-x-2 px-6 py-3 bg-red-600 text-white rounded-xl hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-semibold whitespace-nowrap"
+                className="flex items-center space-x-2 px-6 py-3 bg-red-600! text-white rounded-xl hover:bg-red-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-semibold whitespace-nowrap"
               >
                 <Trash2 className="w-4 h-4" />
                 <span>Reset Account</span>
@@ -233,11 +227,10 @@ export default function Settings() {
               <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Trash2 className="w-8 h-8 text-red-600" />
               </div>
-              <h3 className="text-xl font-bold text-gray-800 mb-2">
-                Reset Account?
-              </h3>
+              <h3 className="text-xl font-bold text-gray-800 mb-2">Reset Account?</h3>
               <p className="text-gray-600 mb-6">
-                Are you sure you want to reset your balance to <strong>0 ILS</strong> and clear all transactions?
+                Are you sure you want to reset your balance to <strong>0 ILS</strong> and clear all
+                transactions?
               </p>
               <div className="flex gap-3">
                 <button
@@ -286,9 +279,9 @@ export default function Settings() {
             {toast.type === 'success' && <CheckCircle className="w-5 h-5 flex-shrink-0" />}
             {toast.type === 'error' && <AlertCircle className="w-5 h-5 flex-shrink-0" />}
             {toast.type === 'warning' && <AlertCircle className="w-5 h-5 flex-shrink-0" />}
-            
+
             <p className="flex-1 font-medium">{toast.message}</p>
-            
+
             <button
               onClick={() => removeToast(toast.id)}
               className="text-gray-400 hover:text-gray-600 transition-colors"

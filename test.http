@@ -55,7 +55,7 @@ Content-Type: application/json
 # Transactions Requests
 
 ### Get all transactions for a user
-GET {{BASE_URL}}/users/5/transactions
+GET {{BASE_URL}}/users/2/transactions
 Content-Type: application/json
 
 ###
@@ -67,7 +67,7 @@ Content-Type: application/json
 ###
 
 ### Create a new transaction for a user
-POST {{BASE_URL}}/users/4/transactions
+POST {{BASE_URL}}/users/2/transactions
 Content-Type: application/json
 
 {

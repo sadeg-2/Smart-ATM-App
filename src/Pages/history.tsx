@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuthStore } from '../Context/authSContext';
 import {
   Filter,
@@ -9,7 +9,6 @@ import {
   ChevronLeft,
   ChevronRight,
 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
 import { ArrowLeftRight } from 'lucide-react';
 
 interface Transaction {
@@ -23,7 +22,6 @@ interface Transaction {
 
 export default function History() {
   const user = useAuthStore((state) => state.user);
-  const navigate = useNavigate();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<'all' | 'deposit' | 'withdraw'>('all');
@@ -114,10 +112,6 @@ export default function History() {
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <button
-                onClick={() => navigate(-1)}
-                className="flex items-center space-x-2 text-gray-600 hover:text-gray-800 transition-colors"
-              ></button>
               <div>
                 <h1 className="text-3xl font-bold text-gray-800 flex items-center gap-3">
                   <div className="p-3 bg-indigo-100 rounded-md">
@@ -212,8 +206,8 @@ export default function History() {
                 onClick={() => setFilter('all')}
                 className={`px-4 py-2 rounded-xl font-medium transition-colors ${
                   filter === 'all'
-                    ? 'bg-indigo-500 text-white'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    ? 'bg-indigo-500! text-white!'
+                    : 'bg-gray-100! text-gray-600! hover:bg-gray-200'
                 }`}
               >
                 All Transactions
@@ -232,8 +226,8 @@ export default function History() {
                 onClick={() => setFilter('withdraw')}
                 className={`px-4 py-2 rounded-xl font-medium transition-colors ${
                   filter === 'withdraw'
-                    ? 'bg-red-500 text-white'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    ? 'bg-red-500! text-white!'
+                    : 'bg-gray-100! text-gray-600! hover:bg-gray-200'
                 }`}
               >
                 Withdrawals
