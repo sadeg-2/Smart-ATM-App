@@ -31,7 +31,10 @@ function Deposit() {
       }
     );
 
-    if (!res.ok) throw new Error("Deposit failed");
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(errorText);
+    }
     setBalance(balanceAfterDeposit);
   }
 

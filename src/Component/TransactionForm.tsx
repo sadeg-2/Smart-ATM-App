@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import Message from "../Component/Message";
 import PopUp from "../Component/PopUp";
 import Toast from "../Component/Toast";
@@ -21,9 +21,10 @@ export default function TransactionForm({
 
   useEffect(() => {
     getUserBalance();
-  }, []);
+  }, [getUserBalance]);
 
-  function handleAction() {
+  function handleAction(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
     const num = Number(amount);
     if (!amount)
       return setWarningMsg(`Enter a value to ${processType.toLowerCase()}`);
@@ -42,9 +43,22 @@ export default function TransactionForm({
       await onConfirm(Number(amount));
       setToastType("success");
       setToastMsg(`${processType} completed successfully!`);
-    } catch {
+      setAmount("");
+    } catch (error) {
       setToastType("error");
-      setToastMsg("Something went wrong. Try again!");
+      if (error instanceof Error) {
+        const msg = error.message || "";
+
+        if (msg.includes("Max number of elements reached")) {
+          setToastMsg(
+            "⚠️ You have reached the maximum limit allowed by the mock API."
+          );
+        } else {
+          setToastMsg(msg || "Something went wrong. Try again!");
+        }
+      } else {
+        setToastMsg("Something went wrong. Try again!");
+      }
     } finally {
       setIsProcessing(false);
       setShowPopUp(false);
@@ -74,13 +88,14 @@ export default function TransactionForm({
             </div>
           ) : (
             <p className="text-3xl font-bold text-blue-600 mt-2">
-              {isNaN(Number(balance)) ? balance : Number(balance).toFixed(2)} ILS
+              {isNaN(Number(balance)) ? balance : Number(balance).toFixed(2)}{" "}
+              ILS
             </p>
           )}
         </div>
 
         {!isNaN(Number(balance)) && (
-          <div className="space-y-4">
+          <form className="space-y-4 " onSubmit={handleAction}>
             <input
               type="text"
               placeholder="Enter the amount"
@@ -89,16 +104,24 @@ export default function TransactionForm({
                 setAmount(e.target.value);
                 setWarningMsg("");
               }}
-              className="w-full px-4 py-2 rounded-lg bg-gray-100 text-gray-800 placeholder-gray-400 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
+              style={{
+                width: "100%",
+                padding: "0.5rem 1rem",
+                borderRadius: "0.5rem",
+                backgroundColor: "#f3f4f6",
+                color: "#1f2937",
+                border: "1px solid #d1d5db",
+                outline: "none",
+                fontSize: "1rem",
+              }}
             />
             <button
-              onClick={handleAction}
               disabled={isProcessing}
               className="w-full py-2.5 rounded-lg font-semibold transition-all duration-300 bg-gray-900 text-white hover:bg-black shadow-md hover:shadow-lg disabled:opacity-50"
             >
               {processType}
             </button>
-          </div>
+          </form>
         )}
 
         {warningMsg && (
