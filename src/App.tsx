@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Layout from './Pages/Layout';
 import ProtectedRoute from './Component/ProtectedRoute';
+import LoadingSpinner from './Component/loading';
 
 const Login = lazy(() => import('./Pages/login'));
 const Dashboard = lazy(() => import('./Pages/dashboard'));
@@ -14,7 +15,7 @@ const NotFound = lazy(() => import('./Pages/not_found'));
 
 function App() {
   return (
-    <Suspense fallback={<p>Loading...</p>}>
+    <Suspense fallback={<LoadingSpinner />}>
       <Routes>
         {/* Login page does not use the main layout */}
         <Route path="/" element={<Login />} />
