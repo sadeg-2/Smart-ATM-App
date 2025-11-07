@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuthStore } from '../Context/authSContext';
 import {
-  ArrowLeft,
   Filter,
-  Download,
   Search,
   Calendar,
   TrendingUp,
