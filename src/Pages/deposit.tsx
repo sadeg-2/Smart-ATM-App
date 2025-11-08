@@ -1,8 +1,8 @@
-import { useEffect } from "react";
-import { useBalanceStore } from "../Context/balanceContext";
-import { useAuthStore } from "../Context/authSContext";
-import { BanknoteArrowUp } from "lucide-react";
-import TransactionForm from "../Component/TransactionForm";
+import { useEffect } from 'react';
+import { useBalanceStore } from '../Context/balanceContext';
+import { useAuthStore } from '../Context/authSContext';
+import { BanknoteArrowUp } from 'lucide-react';
+import TransactionForm from '../Component/TransactionForm';
 
 function Deposit() {
   const { balance, getUserBalance, setBalance } = useBalanceStore();
@@ -18,14 +18,14 @@ function Deposit() {
     const res = await fetch(
       `https://69060c47ee3d0d14c134982d.mockapi.io/users/${userId}/transactions`,
       {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          type: "deposit",
+          type: 'deposit',
           amount: amount,
-          currency: "ILS",
+          currency: 'ILS',
           date: new Date().toDateString(),
         }),
       }
@@ -38,13 +38,7 @@ function Deposit() {
     setBalance(balanceAfterDeposit);
   }
 
-  return (
-    <TransactionForm
-      processType="Deposit"
-      onConfirm={handleDeposit}
-      icon={BanknoteArrowUp}
-    />
-  );
+  return <TransactionForm processType="Deposit" onConfirm={handleDeposit} icon={BanknoteArrowUp} />;
 }
 
 export default Deposit;

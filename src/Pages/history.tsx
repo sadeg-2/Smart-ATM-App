@@ -72,10 +72,10 @@ export default function History() {
   // Calculate
   const stats = {
     totalDeposits: transactions
-      .filter((t) => t.type === 'Deposit')
+      .filter((t) => t.type === 'deposit')
       .reduce((sum, t) => sum + t.amount, 0),
     totalWithdrawals: transactions
-      .filter((t) => t.type === 'Withdraw')
+      .filter((t) => t.type === 'withdraw')
       .reduce((sum, t) => sum + t.amount, 0),
     transactionCount: transactions.length,
   };

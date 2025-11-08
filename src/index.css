@@ -4,13 +4,13 @@ body {
   @apply bg-white text-gray-800 font-sans antialiased;
 }
 
-html,
-body {
-  height: 100%;
-  width: 100%;
-  margin: 0;
-  padding: 0;
+
+html, body {
+  min-height: 100%;
+  height: auto;
+  overflow-y: auto;
 }
+
 
 @keyframes fadeIn {
   from {

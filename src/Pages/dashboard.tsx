@@ -1,4 +1,4 @@
-import  { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuthStore } from '../Context/authSContext';
 import { useNavigate } from 'react-router-dom';
 import Header from '../Component/Header';
@@ -28,7 +28,7 @@ export default function Dashboard() {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [balance, setBalance] = useState<number>(0);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error] = useState('');
   const [showConfirm, setShowConfirm] = useState(false);
   const [birthdayModal, setBirthdayModal] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
@@ -36,14 +36,14 @@ export default function Dashboard() {
   // Calculate
   const summary = {
     deposits: transactions
-      .filter((tx) => tx.type === 'Deposit')
+      .filter((tx) => tx.type === 'deposit')
       .reduce((sum, tx) => sum + tx.amount, 0),
     withdrawals: transactions
-      .filter((tx) => tx.type === 'Withdraw')
+      .filter((tx) => tx.type === 'withdraw')
       .reduce((sum, tx) => sum + tx.amount, 0),
     balance: balance,
   };
-  console.log('Summary:', transactions);
+
   const fetchUserData = async () => {
     if (!user) return;
     try {
@@ -64,7 +64,6 @@ export default function Dashboard() {
       const today = new Date();
       const todayKey = `birthdayShown-${today.toISOString().slice(0, 10)}`;
       const birthDate = userData.birthday ? new Date(userData.birthday) : null;
-      console.log('User birthday:', birthDate);
 
       if (
         birthDate instanceof Date &&
@@ -78,12 +77,11 @@ export default function Dashboard() {
           setShowConfetti(true);
         }, 1000);
         localStorage.setItem(todayKey, 'true');
-        console.log('Birthday modal set to show', birthdayModal);
       }
       const transactionsData = await txRes.json();
 
       setBalance(userData.balance);
-
+      console.log(transactionsData);
       setTransactions(
         transactionsData
           .sort(
@@ -94,8 +92,6 @@ export default function Dashboard() {
       );
 
       // Birthday
-
-      console.log('birthdate modal:', birthdayModal);
     } catch (err) {
       console.error(err);
       //  setError("⚠️ Failed to fetch user data");
@@ -144,7 +140,6 @@ export default function Dashboard() {
       </div>
     );
   }
-  console.log('birthday modal render:', birthdayModal);
   return (
     <div className="min-h-screen bg-gradient-to-br ">
       {showConfetti && (

@@ -10,6 +10,7 @@ import {
   Calendar,
   Receipt,
 } from 'lucide-react';
+import { useBalanceStore } from '../Context/balanceContext';
 
 interface Toast {
   id: string;
@@ -19,6 +20,7 @@ interface Toast {
 
 export default function Settings() {
   const user = useAuthStore((state) => state.user);
+  const {setBalance } = useBalanceStore();
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
   const [toasts, setToasts] = useState<Toast[]>([]);
@@ -97,6 +99,7 @@ export default function Settings() {
       showToast('success', 'Account has been reset successfully!');
       setShowResetConfirm(false);
       setCount(0);
+      setBalance(0)
     } catch (err) {
       console.error(err);
       showToast('error', 'Failed to reset account data. Please try again.');

@@ -1,8 +1,8 @@
 import { useState, type FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../Context/authSContext';
-import type { UserInfo } from '../Types/userInfo';
 import '../Styles/Login.scss'; // SCSS file with glassmorphism styles
+import type { UserInfo } from '../Types/types';
 
 export default function Login() {
   const { login } = useAuthStore();

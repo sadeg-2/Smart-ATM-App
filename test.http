@@ -25,13 +25,13 @@ POST {{BASE_URL}}/users
 Content-Type: application/json
 
 {
-  "user_name": "soad",
+  "user_name": "saaaf",
   "first_name": "nade",
   "last_name": "jaa",
   "profile_img": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQoFRQjM-wM_nXMA03AGDXgJK3VeX7vtD3ctA&s",
   "pin": "Sa1234",
   "balance": 1600,
-  "birthday": "2002-08-04"
+  "birthday": "2002-11-08"
 }
 
 ###
