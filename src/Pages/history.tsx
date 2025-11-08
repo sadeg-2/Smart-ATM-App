@@ -71,7 +71,7 @@ export default function History() {
 
   // Calculate
   const stats = {
-    totalDeposits: transactions
+    totaldeposits: transactions
       .filter((t) => t.type === 'deposit')
       .reduce((sum, t) => sum + t.amount, 0),
     totalWithdrawals: transactions
@@ -106,7 +106,7 @@ export default function History() {
   }
 
   return (
-   <>
+    <>
       {/* Header */}
       <div className="bg-white/80 backdrop-blur-lg border-b border-gray-200/50 shadow-sm rounded-md">
         <div className="container mx-auto px-4 py-6">
@@ -144,9 +144,9 @@ export default function History() {
           <div className="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-l-green-500">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Total Deposits</p>
+                <p className="text-sm font-medium text-gray-600">Total deposits</p>
                 <p className="text-2xl font-bold text-gray-800">
-                  {stats.totalDeposits.toLocaleString('en-IL')} ILS
+                  {stats.totaldeposits.toLocaleString('en-IL')} ILS
                 </p>
               </div>
               <div className="p-3 bg-green-100 rounded-full">
@@ -175,20 +175,20 @@ export default function History() {
                 <p className="text-sm font-medium text-gray-600">Net Flow</p>
                 <p
                   className={`text-2xl font-bold ${
-                    stats.totalDeposits - stats.totalWithdrawals >= 0
+                    stats.totaldeposits - stats.totalWithdrawals >= 0
                       ? 'text-green-600'
                       : 'text-red-600'
                   }`}
                 >
-                  {(stats.totalDeposits - stats.totalWithdrawals).toLocaleString('en-IL')} ILS
+                  {(stats.totaldeposits - stats.totalWithdrawals).toLocaleString('en-IL')} ILS
                 </p>
               </div>
               <div
                 className={`p-3 rounded-full ${
-                  stats.totalDeposits - stats.totalWithdrawals >= 0 ? 'bg-green-100' : 'bg-red-100'
+                  stats.totaldeposits - stats.totalWithdrawals >= 0 ? 'bg-green-100' : 'bg-red-100'
                 }`}
               >
-                {stats.totalDeposits - stats.totalWithdrawals >= 0 ? (
+                {stats.totaldeposits - stats.totalWithdrawals >= 0 ? (
                   <TrendingUp className="w-6 h-6 text-green-600" />
                 ) : (
                   <TrendingDown className="w-6 h-6 text-red-600" />
@@ -220,7 +220,7 @@ export default function History() {
                     : 'bg-gray-100! text-gray-600! hover:bg-gray-200'
                 }`}
               >
-                Deposits
+                deposits
               </button>
               <button
                 onClick={() => setFilter('withdraw')}
@@ -260,12 +260,12 @@ export default function History() {
                     <div className="flex items-center space-x-4">
                       <div
                         className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                          transaction.type === 'Deposit'
+                          transaction.type === 'deposit'
                             ? 'bg-green-100 text-green-600'
                             : 'bg-red-100 text-red-600'
                         }`}
                       >
-                        {transaction.type === 'Deposit' ? (
+                        {transaction.type === 'deposit' ? (
                           <TrendingUp className="w-6 h-6" />
                         ) : (
                           <TrendingDown className="w-6 h-6" />
@@ -290,15 +290,15 @@ export default function History() {
                     <div className="text-right">
                       <p
                         className={`text-xl font-bold ${
-                          transaction.type === 'Deposit' ? 'text-green-600' : 'text-red-600'
+                          transaction.type === 'deposit' ? 'text-green-600' : 'text-red-600'
                         }`}
                       >
-                        {transaction.type === 'Deposit' ? '+' : '-'}
+                        {transaction.type === 'deposit' ? '+' : '-'}
                         {transaction.amount.toLocaleString('en-IL')} {transaction.currency}
                       </p>
                       <p
                         className={`text-sm font-medium px-3 py-1 rounded-full ${
-                          transaction.type === 'Deposit'
+                          transaction.type === 'deposit'
                             ? 'bg-green-100 text-green-700'
                             : 'bg-red-100 text-red-700'
                         }`}

@@ -169,11 +169,11 @@ export default function Dashboard() {
       <div className="container mx-auto px-4 py-8 max-w-6xl">
         {/* Summary Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          {/* Total Deposits Card */}
+          {/* Total deposits Card */}
           <div className="bg-white rounded-2xl shadow-lg p-6 border border-green-100 transform hover:scale-105 transition-transform duration-200">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-green-600 mb-1">Total Deposits</p>
+                <p className="text-sm font-medium text-green-600 mb-1">Total deposits</p>
                 <p className="text-2xl font-bold text-gray-800">
                   {summary.deposits.toLocaleString('en-IL')} ILS
                 </p>
@@ -233,7 +233,7 @@ export default function Dashboard() {
           <h2 className="text-2xl font-bold text-gray-800 mb-8 text-center">Banking Services</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Deposit Button */}
+            {/* deposit Button */}
             <button
               onClick={() => navigate('/deposit')}
               disabled={loading}
@@ -243,7 +243,7 @@ export default function Dashboard() {
                 <div className="p-4 bg-green-100 rounded-full  transition-colors">
                   <BanknoteArrowUp className="w-8 h-8" />
                 </div>
-                <span className="text-xl font-semibold">Deposit</span>
+                <span className="text-xl font-semibold">deposit</span>
                 <p className="text-green-500 text-sm">Add funds to your account</p>
               </div>
             </button>
