@@ -62,7 +62,9 @@ export default function Layout() {
 
   {/* Main content */}
   <main className="flex-1 ml-60 p-6 overflow-y-auto min-h-screen">
+    <div className="bg-white shadow-lg rounded-2xl p-6 border border-gray-200">
     <Outlet />
+  </div>
   </main>
 </div>
 
