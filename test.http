@@ -67,7 +67,7 @@ Content-Type: application/json
 ###
 
 ### Create a new transaction for a user
-POST {{BASE_URL}}/users/4/transactions
+POST {{BASE_URL}}/users/2/transactions
 Content-Type: application/json
 
 {
