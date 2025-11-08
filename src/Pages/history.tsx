@@ -10,7 +10,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { ArrowLeftRight } from "lucide-react";
-import Loader from "./../Component/Loader";
+import Loader from "../Component/Loader";
 
 interface Transaction {
   id: string;
@@ -24,7 +24,7 @@ interface Transaction {
 export default function History() {
   const user = useAuthStore((state) => state.user);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState<"all" | "deposit" | "withdraw">("all");
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -73,7 +73,7 @@ export default function History() {
 
   // Calculate
   const stats = {
-    totalDeposits: transactions
+    totaldeposits: transactions
       .filter((t) => t.type === "deposit")
       .reduce((sum, t) => sum + t.amount, 0),
     totalWithdrawals: transactions
@@ -152,10 +152,10 @@ export default function History() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">
-                  Total Deposits
+                  Total deposits
                 </p>
                 <p className="text-2xl font-bold text-gray-800">
-                  {stats.totalDeposits.toLocaleString("en-IL")} ILS
+                  {stats.totaldeposits.toLocaleString("en-IL")} ILS
                 </p>
               </div>
               <div className="p-3 bg-green-100 rounded-full">
@@ -186,25 +186,25 @@ export default function History() {
                 <p className="text-sm font-medium text-gray-600">Net Flow</p>
                 <p
                   className={`text-2xl font-bold ${
-                    stats.totalDeposits - stats.totalWithdrawals >= 0
+                    stats.totaldeposits - stats.totalWithdrawals >= 0
                       ? "text-green-600"
                       : "text-red-600"
                   }`}
                 >
                   {(
-                    stats.totalDeposits - stats.totalWithdrawals
+                    stats.totaldeposits - stats.totalWithdrawals
                   ).toLocaleString("en-IL")}{" "}
                   ILS
                 </p>
               </div>
               <div
                 className={`p-3 rounded-full ${
-                  stats.totalDeposits - stats.totalWithdrawals >= 0
+                  stats.totaldeposits - stats.totalWithdrawals >= 0
                     ? "bg-green-100"
                     : "bg-red-100"
                 }`}
               >
-                {stats.totalDeposits - stats.totalWithdrawals >= 0 ? (
+                {stats.totaldeposits - stats.totalWithdrawals >= 0 ? (
                   <TrendingUp className="w-6 h-6 text-green-600" />
                 ) : (
                   <TrendingDown className="w-6 h-6 text-red-600" />
@@ -276,12 +276,12 @@ export default function History() {
                     <div className="flex items-center space-x-4">
                       <div
                         className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                          transaction.type === "Deposit"
+                          transaction.type === "deposit"
                             ? "bg-green-100 text-green-600"
                             : "bg-red-100 text-red-600"
                         }`}
                       >
-                        {transaction.type === "Deposit" ? (
+                        {transaction.type === "deposit" ? (
                           <TrendingUp className="w-6 h-6" />
                         ) : (
                           <TrendingDown className="w-6 h-6" />
@@ -309,18 +309,18 @@ export default function History() {
                     <div className="text-right">
                       <p
                         className={`text-xl font-bold ${
-                          transaction.type === "Deposit"
+                          transaction.type === "deposit"
                             ? "text-green-600"
                             : "text-red-600"
                         }`}
                       >
-                        {transaction.type === "Deposit" ? "+" : "-"}
+                        {transaction.type === "deposit" ? "+" : "-"}
                         {transaction.amount.toLocaleString("en-IL")}{" "}
                         {transaction.currency}
                       </p>
                       <p
                         className={`text-sm font-medium px-3 py-1 rounded-full ${
-                          transaction.type === "Deposit"
+                          transaction.type === "deposit"
                             ? "bg-green-100 text-green-700"
                             : "bg-red-100 text-red-700"
                         }`}
