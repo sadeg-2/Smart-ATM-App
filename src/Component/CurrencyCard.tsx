@@ -1,7 +1,6 @@
 
-
-import React from 'react';
-import { toast } from 'react-hot-toast';
+import React from "react";
+import { toast } from "react-hot-toast";
 
 interface CurrencyCardProps {
   name: string;
@@ -21,7 +20,9 @@ export default function CurrencyCard({
   const handleToggle = () => {
     toggleFavorite();
     toast.success(
-      isFavorite ? `${name} removed from Watchlist ❌` : `${name} added to Watchlist ⭐`
+      isFavorite
+        ? `${name} removed from Watchlist ❌`
+        : `${name} added to Watchlist ⭐`
     );
   };
 
@@ -31,23 +32,26 @@ export default function CurrencyCard({
         <img
           src={`https://flagcdn.com/24x18/${name.slice(0, 2).toLowerCase()}.png`}
           alt={`${name} flag`}
-          onError={(e) => ((e.target as HTMLImageElement).style.display = 'none')}
+          onError={(e) => ((e.target as HTMLImageElement).style.display = "none")}
         />
         <div>
           <h2 className="text-lg font-bold text-gray-800">{name}</h2>
           <p className="text-gray-500 mt-1 text-sm">
-            Rate: <span className="font-semibold text-indigo-600">{rate.toFixed(3)}</span>
+            Rate:{" "}
+            <span className="font-semibold text-indigo-600">
+              {rate.toFixed(3)}
+            </span>
           </p>
         </div>
       </div>
 
       <button
-        className={`text-2xl transition-transform duration-200 hover:scale-125 ${
-          isFavorite ? 'text-yellow-400' : 'text-gray-300'
+        className={`text-3xl transition-transform duration-200 hover:scale-125 ${
+          isFavorite ? "text-yellow-400 drop-shadow-md" : "text-gray-300"
         }`}
         onClick={handleToggle}
       >
-        {isWatchlist ? '❌' : '⭐'}
+        ⭐
       </button>
     </div>
   );
