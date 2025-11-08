@@ -52,7 +52,7 @@ export default function Settings() {
         );
         const data = await response.json();
         console.log(data);
-        if (data == 'Not Found') {
+        if (data == 'Not found') {
           setCount(0);
           return;
         }
@@ -120,9 +120,9 @@ export default function Settings() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+   <>
       {/* Header */}
-      <div className="bg-white/80 backdrop-blur-lg border-b border-gray-200/50 shadow-sm">
+      <div className="bg-white/80 backdrop-blur-lg border-b border-gray-200/50 shadow-sm rounded-md">
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-3">
@@ -294,6 +294,6 @@ export default function Settings() {
           </div>
         ))}
       </div>
-    </div>
+    </>
   );
 }

@@ -106,9 +106,9 @@ export default function History() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+   <>
       {/* Header */}
-      <div className="bg-white/80 backdrop-blur-lg border-b border-gray-200/50 shadow-sm">
+      <div className="bg-white/80 backdrop-blur-lg border-b border-gray-200/50 shadow-sm rounded-md">
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
@@ -371,6 +371,6 @@ export default function History() {
           </div>
         )}
       </div>
-    </div>
+    </>
   );
 }

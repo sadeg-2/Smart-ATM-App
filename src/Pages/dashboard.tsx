@@ -45,6 +45,7 @@ export default function Dashboard() {
   };
 
   const fetchUserData = async () => {
+    console.log(user);
     if (!user) return;
     try {
       setLoading(true);
@@ -62,22 +63,32 @@ export default function Dashboard() {
 
       const userData = await userRes.json();
       const today = new Date();
-      const todayKey = `birthdayShown-${today.toISOString().slice(0, 10)}`;
+      
+      
+      const todayKey = `birthdayShown_${user.id}_${today.toDateString()}`;
       const birthDate = userData.birthday ? new Date(userData.birthday) : null;
+      
+      console.log('Birth date:', birthDate);
+      console.log('Today:', today);
+      console.log('Birthday shown key:', localStorage.getItem(todayKey));
 
+      
       if (
         birthDate instanceof Date &&
         !isNaN(birthDate.getTime()) &&
-        birthDate.getDay() === today.getDay() &&
+        birthDate.getDate() === today.getDate() &&
         birthDate.getMonth() === today.getMonth() &&
         !localStorage.getItem(todayKey)
       ) {
+        console.log('Show birthday modal for user:', user.id);
         setTimeout(() => {
           setBirthdayModal(true);
           setShowConfetti(true);
         }, 1000);
+       
         localStorage.setItem(todayKey, 'true');
       }
+      
       const transactionsData = await txRes.json();
 
       setBalance(userData.balance);
@@ -91,10 +102,9 @@ export default function Dashboard() {
           .slice(0, 5)
       );
 
-      // Birthday
     } catch (err) {
       console.error(err);
-      //  setError("⚠️ Failed to fetch user data");
+      // setError("⚠️ Failed to fetch user data");
     } finally {
       setLoading(false);
     }
