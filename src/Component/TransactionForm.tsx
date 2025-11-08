@@ -4,6 +4,7 @@ import PopUp from "../Component/PopUp";
 import Toast from "../Component/Toast";
 import type { TransactionType } from "../Types/types";
 import { useBalanceStore } from "../Context/balanceContext";
+import Loader from "./Loader";
 
 export default function TransactionForm({
   processType,
@@ -69,6 +70,10 @@ export default function TransactionForm({
     setShowPopUp(false);
     setAmount("");
     setIsProcessing(false);
+  }
+
+  if (isLoadingBalance) {
+    return <Loader />;
   }
 
   return (

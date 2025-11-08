@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { useAuthStore } from '../Context/authSContext';
+import { useEffect, useState } from "react";
+import { useAuthStore } from "../Context/authSContext";
 import {
   Trash2,
   User,
@@ -9,24 +9,26 @@ import {
   X,
   Calendar,
   Receipt,
-} from 'lucide-react';
-import { useBalanceStore } from '../Context/balanceContext';
+} from "lucide-react";
+import { useBalanceStore } from "../Context/balanceContext";
+import Loader from "../Component/Loader";
 
 interface Toast {
   id: string;
-  type: 'success' | 'error' | 'warning';
+  type: "success" | "error" | "warning";
   message: string;
 }
 
 export default function Settings() {
   const user = useAuthStore((state) => state.user);
-  const {setBalance } = useBalanceStore();
+  const { setBalance } = useBalanceStore();
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isLoadingpage, setIsLoadingPage] = useState(true);
   const [toasts, setToasts] = useState<Toast[]>([]);
 
   // Toast
-  const showToast = (type: Toast['type'], message: string) => {
+  const showToast = (type: Toast["type"], message: string) => {
     const id = Math.random().toString(36).substr(2, 9);
     const newToast: Toast = { id, type, message };
     setToasts((prev) => [...prev, newToast]);
@@ -51,16 +53,15 @@ export default function Settings() {
           `https://69060c47ee3d0d14c134982d.mockapi.io/users/${user.id}/transactions`
         );
         const data = await response.json();
-        console.log(data);
-        if (data == 'Not found') {
+        if (data == "Not found") {
           setCount(0);
           return;
         }
         setCount(data.length);
-
-        console.log('Transaction count:', data);
       } catch (error) {
-        console.error('Failed to fetch transaction count:', error);
+        console.error("Failed to fetch transaction count:", error);
+      } finally {
+        setIsLoadingPage(false);
       }
     };
 
@@ -74,11 +75,14 @@ export default function Settings() {
       setLoading(true);
 
       // Reset balance
-      await fetch(`https://69060c47ee3d0d14c134982d.mockapi.io/users/${user.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ balance: 0 }),
-      });
+      await fetch(
+        `https://69060c47ee3d0d14c134982d.mockapi.io/users/${user.id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ balance: 0 }),
+        }
+      );
 
       const transactionsResponse = await fetch(
         `https://69060c47ee3d0d14c134982d.mockapi.io/users/${user.id}/transactions`
@@ -91,18 +95,18 @@ export default function Settings() {
         for (const tx of transactions) {
           await fetch(
             `https://69060c47ee3d0d14c134982d.mockapi.io/users/${user.id}/transactions/${tx.id}`,
-            { method: 'DELETE' }
+            { method: "DELETE" }
           );
         }
       }
 
-      showToast('success', 'Account has been reset successfully!');
+      showToast("success", "Account has been reset successfully!");
       setShowResetConfirm(false);
       setCount(0);
-      setBalance(0)
+      setBalance(0);
     } catch (err) {
       console.error(err);
-      showToast('error', 'Failed to reset account data. Please try again.');
+      showToast("error", "Failed to reset account data. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -118,9 +122,12 @@ export default function Settings() {
       </div>
     );
   }
+  if (isLoadingpage) {
+    return <Loader />;
+  }
 
   return (
-   <>
+    <>
       {/* Header */}
       <div className="bg-white/80 backdrop-blur-lg border-b border-gray-200/50 shadow-sm rounded-md">
         <div className="container mx-auto px-4 py-6">
@@ -166,7 +173,7 @@ export default function Settings() {
                 </div>
                 <p className="text-sm text-gray-600">Balance</p>
                 <p className="font-bold text-gray-800">
-                  {user.balance?.toLocaleString('en-IL') || 0} ILS
+                  {user.balance?.toLocaleString("en-IL") || 0} ILS
                 </p>
               </div>
 
@@ -185,7 +192,8 @@ export default function Settings() {
               <div className="flex items-center space-x-2 bg-blue-50 px-4 py-2 rounded-full mt-2">
                 <Calendar className="w-4 h-4 text-blue-600" />
                 <span className="text-sm text-blue-700">
-                  Birthday: {new Date(user.birthday).toLocaleDateString('en-IL')}
+                  Birthday:{" "}
+                  {new Date(user.birthday).toLocaleDateString("en-IL")}
                 </span>
               </div>
             )}
@@ -202,10 +210,12 @@ export default function Settings() {
           <div className="bg-red-50 border border-red-200 rounded-xl p-6">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
-                <h3 className="font-bold text-red-800 mb-2">Reset Your Account</h3>
+                <h3 className="font-bold text-red-800 mb-2">
+                  Reset Your Account
+                </h3>
                 <p className="text-red-600 text-sm">
-                  This will permanently reset your balance to zero and delete all transaction
-                  history. This action cannot be undone.
+                  This will permanently reset your balance to zero and delete
+                  all transaction history. This action cannot be undone.
                 </p>
               </div>
 
@@ -230,10 +240,12 @@ export default function Settings() {
               <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Trash2 className="w-8 h-8 text-red-600" />
               </div>
-              <h3 className="text-xl font-bold text-gray-800 mb-2">Reset Account?</h3>
+              <h3 className="text-xl font-bold text-gray-800 mb-2">
+                Reset Account?
+              </h3>
               <p className="text-gray-600 mb-6">
-                Are you sure you want to reset your balance to <strong>0 ILS</strong> and clear all
-                transactions?
+                Are you sure you want to reset your balance to{" "}
+                <strong>0 ILS</strong> and clear all transactions?
               </p>
               <div className="flex gap-3">
                 <button
@@ -272,16 +284,22 @@ export default function Settings() {
           <div
             key={toast.id}
             className={`flex items-center space-x-3 p-4 rounded-xl shadow-lg border-l-4 min-w-80 transform animate-slide-in ${
-              toast.type === 'success'
-                ? 'bg-green-50 border-green-400 text-green-800'
-                : toast.type === 'error'
-                ? 'bg-red-50 border-red-400 text-red-800'
-                : 'bg-yellow-50 border-yellow-400 text-yellow-800'
+              toast.type === "success"
+                ? "bg-green-50 border-green-400 text-green-800"
+                : toast.type === "error"
+                ? "bg-red-50 border-red-400 text-red-800"
+                : "bg-yellow-50 border-yellow-400 text-yellow-800"
             }`}
           >
-            {toast.type === 'success' && <CheckCircle className="w-5 h-5 flex-shrink-0" />}
-            {toast.type === 'error' && <AlertCircle className="w-5 h-5 flex-shrink-0" />}
-            {toast.type === 'warning' && <AlertCircle className="w-5 h-5 flex-shrink-0" />}
+            {toast.type === "success" && (
+              <CheckCircle className="w-5 h-5 flex-shrink-0" />
+            )}
+            {toast.type === "error" && (
+              <AlertCircle className="w-5 h-5 flex-shrink-0" />
+            )}
+            {toast.type === "warning" && (
+              <AlertCircle className="w-5 h-5 flex-shrink-0" />
+            )}
 
             <p className="flex-1 font-medium">{toast.message}</p>
 

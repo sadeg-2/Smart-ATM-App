@@ -1,22 +1,24 @@
-import { useState, type FormEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuthStore } from '../Context/authSContext';
-import '../Styles/Login.scss'; // SCSS file with glassmorphism styles
-import type { UserInfo } from '../Types/types';
+import { useState, type FormEvent } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuthStore } from "../Context/authSContext";
+import "../Styles/Login.scss"; // SCSS file with glassmorphism styles
+import type { UserInfo } from "../Types/types";
 
 export default function Login() {
   const { login } = useAuthStore();
   const navigate = useNavigate();
 
-  const [userName, setUserName] = useState('');
-  const [pin, setPin] = useState('');
+  const [userName, setUserName] = useState("");
+  const [pin, setPin] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
+      setIsLoading(true);
       const res = await fetch(
-        'https://69060c47ee3d0d14c134982d.mockapi.io/users'
+        "https://69060c47ee3d0d14c134982d.mockapi.io/users"
       );
       const users: UserInfo[] = await res.json();
       const user = users.find(
@@ -24,14 +26,16 @@ export default function Login() {
       );
 
       if (!user) {
-        alert('❌ Invalid username or PIN');
+        alert("❌ Invalid username or PIN");
         return;
       }
 
       login(user);
-      navigate('/dashboard');
+      navigate("/dashboard");
     } catch (err) {
-      alert('⚠️ Failed to connect to API: ' + err);
+      alert("⚠️ Failed to connect to API: " + err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -80,21 +84,15 @@ export default function Login() {
           </div>
         </div>
 
-        <button className="btn block-cube block-cube-hover" type="submit">
-          <div className="bg-top">
-            <div className="bg-inner"></div>
-          </div>
-          <div className="bg-right">
-            <div className="bg-inner"></div>
-          </div>
-          <div className="bg">
-            <div className="bg-inner"></div>
-          </div>
-          <div className="text">Log In</div>
+        <button
+          type="submit"
+          className={`btn ${isLoading ? "loading" : ""}`}
+          disabled={isLoading}
+        >
+          {isLoading && <span className="loader"></span>}
+          <span className="text">Log In</span>
         </button>
       </form>
     </div>
   );
 }
-
-

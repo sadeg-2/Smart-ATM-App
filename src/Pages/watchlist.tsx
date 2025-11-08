@@ -1,29 +1,37 @@
-
-import React, { useEffect, useState } from "react";
-import CurrencyCard from "../component/CurrencyCard";
+import { useEffect, useState } from "react";
+import CurrencyCard from "../Component/CurrencyCard";
 import { useWatchlistStore } from "../Context/WatchlistContext";
 import { Toaster } from "react-hot-toast";
+import Loader from "../Component/Loader";
 
 export default function Watchlist() {
-  const { currencies, toggleFavorite, getFavorites, fetchCurrencies } =
-    useWatchlistStore();
+  const {
+    currencies,
+    toggleFavorite,
+    getFavorites,
+    fetchCurrencies,
+    isLoadingWatchList,
+  } = useWatchlistStore();
   const [search, setSearch] = useState("");
   const [tab, setTab] = useState<"all" | "favorites">("all");
   const favorites = getFavorites();
 
   useEffect(() => {
     fetchCurrencies();
-  }, [fetchCurrencies]);
+  }, []);
 
-  const filtered =
-    (tab === "all" ? currencies : favorites).filter((c) =>
-      c.code.toLowerCase().includes(search.toLowerCase())
-    );
+  const filtered = (tab === "all" ? currencies : favorites).filter((c) =>
+    c.code.toLowerCase().includes(search.toLowerCase())
+  );
 
   const isLoading = currencies.length === 0;
 
+  if (isLoadingWatchList) {
+    return <Loader />;
+  }
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-100 to-indigo-200 flex flex-col items-center p-8">
+    <div className="min-h-screen flex flex-col items-center p-8">
       <Toaster position="top-center" />
       <h1 className="text-4xl font-extrabold mb-8 text-gray-800">
         💱 Currency Watchlist
@@ -65,9 +73,13 @@ export default function Watchlist() {
 
         {/* Content */}
         {isLoading ? (
-          <p className="text-gray-500 text-center italic">Loading currencies...</p>
+          <p className="text-gray-500 text-center italic">
+            Loading currencies...
+          </p>
         ) : filtered.length === 0 ? (
-          <p className="text-red-500 text-center italic">❌ No currencies found.</p>
+          <p className="text-red-500 text-center italic">
+            ❌ No currencies found.
+          </p>
         ) : (
           <ul className="space-y-4">
             {filtered.map((currency) => (
