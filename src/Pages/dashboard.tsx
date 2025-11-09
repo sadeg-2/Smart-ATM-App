@@ -11,6 +11,7 @@ import {
   Wallet,
 } from 'lucide-react';
 import Confetti from 'react-confetti';
+import Loader from './../Component/Loader';
 
 interface Transaction {
   id: string;
@@ -45,7 +46,6 @@ export default function Dashboard() {
   };
 
   const fetchUserData = async () => {
-    console.log(user);
     if (!user) return;
     try {
       setLoading(true);
@@ -68,10 +68,6 @@ export default function Dashboard() {
       const todayKey = `birthdayShown_${user.id}_${today.toDateString()}`;
       const birthDate = userData.birthday ? new Date(userData.birthday) : null;
       
-      console.log('Birth date:', birthDate);
-      console.log('Today:', today);
-      console.log('Birthday shown key:', localStorage.getItem(todayKey));
-
       
       if (
         birthDate instanceof Date &&
@@ -144,11 +140,7 @@ export default function Dashboard() {
     );
   }
   if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
-      </div>
-    );
+    return <Loader/>
   }
   return (
     <div className="min-h-screen bg-gradient-to-br ">

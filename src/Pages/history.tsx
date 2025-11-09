@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { useAuthStore } from '../Context/authSContext';
+import { useState, useEffect } from "react";
+import { useAuthStore } from "../Context/authSContext";
 import {
   Filter,
   Search,
@@ -8,8 +8,9 @@ import {
   TrendingDown,
   ChevronLeft,
   ChevronRight,
-} from 'lucide-react';
-import { ArrowLeftRight } from 'lucide-react';
+} from "lucide-react";
+import { ArrowLeftRight } from "lucide-react";
+import Loader from "../Component/Loader";
 
 interface Transaction {
   id: string;
@@ -23,9 +24,9 @@ interface Transaction {
 export default function History() {
   const user = useAuthStore((state) => state.user);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState<'all' | 'deposit' | 'withdraw'>('all');
-  const [searchTerm, setSearchTerm] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [filter, setFilter] = useState<"all" | "deposit" | "withdraw">("all");
+  const [searchTerm, setSearchTerm] = useState("");
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -54,7 +55,7 @@ export default function History() {
         setTransactions(sortedTransactions);
       }
     } catch (error) {
-      console.error('Failed to fetch transactions:', error);
+      console.error("Failed to fetch transactions:", error);
     } finally {
       setLoading(false);
     }
@@ -62,20 +63,21 @@ export default function History() {
 
   // Filter
   const filteredTransactions = transactions.filter((transaction) => {
-    const matchesFilter = filter === 'all' || transaction.type.toLowerCase() === filter;
+    const matchesFilter =
+      filter === "all" || transaction.type.toLowerCase() === filter;
     const matchesSearch =
       transaction.amount.toString().includes(searchTerm) ||
       transaction.type.toLowerCase().includes(searchTerm.toLowerCase());
-    return matchesFilter && (searchTerm === '' || matchesSearch);
+    return matchesFilter && (searchTerm === "" || matchesSearch);
   });
 
   // Calculate
   const stats = {
     totaldeposits: transactions
-      .filter((t) => t.type === 'deposit')
+      .filter((t) => t.type === "deposit")
       .reduce((sum, t) => sum + t.amount, 0),
     totalWithdrawals: transactions
-      .filter((t) => t.type === 'withdraw')
+      .filter((t) => t.type === "withdraw")
       .reduce((sum, t) => sum + t.amount, 0),
     transactionCount: transactions.length,
   };
@@ -87,10 +89,13 @@ export default function History() {
     indexOfFirstTransaction,
     indexOfLastTransaction
   );
-  const totalPages = Math.ceil(filteredTransactions.length / transactionsPerPage);
+  const totalPages = Math.ceil(
+    filteredTransactions.length / transactionsPerPage
+  );
 
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
-  const nextPage = () => setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+  const nextPage = () =>
+    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
   const prevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
 
   useEffect(() => {
@@ -98,11 +103,7 @@ export default function History() {
   }, [filter, searchTerm]);
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
-      </div>
-    );
+    return <Loader />;
   }
 
   return (
@@ -119,7 +120,9 @@ export default function History() {
                   </div>
                   Transaction History
                 </h1>
-                <p className="text-gray-600">Complete overview of all your transactions</p>
+                <p className="text-gray-600">
+                  Complete overview of all your transactions
+                </p>
               </div>
             </div>
           </div>
@@ -132,8 +135,12 @@ export default function History() {
           <div className="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-l-indigo-500">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Total Transactions</p>
-                <p className="text-2xl font-bold text-gray-800">{stats.transactionCount}</p>
+                <p className="text-sm font-medium text-gray-600">
+                  Total Transactions
+                </p>
+                <p className="text-2xl font-bold text-gray-800">
+                  {stats.transactionCount}
+                </p>
               </div>
               <div className="p-3 bg-indigo-100 rounded-full">
                 <Calendar className="w-6 h-6 text-indigo-600" />
@@ -144,9 +151,11 @@ export default function History() {
           <div className="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-l-green-500">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Total deposits</p>
+                <p className="text-sm font-medium text-gray-600">
+                  Total deposits
+                </p>
                 <p className="text-2xl font-bold text-gray-800">
-                  {stats.totaldeposits.toLocaleString('en-IL')} ILS
+                  {stats.totaldeposits.toLocaleString("en-IL")} ILS
                 </p>
               </div>
               <div className="p-3 bg-green-100 rounded-full">
@@ -158,9 +167,11 @@ export default function History() {
           <div className="bg-white rounded-2xl shadow-lg p-6 border-l-4 border-l-red-500">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Total Withdrawals</p>
+                <p className="text-sm font-medium text-gray-600">
+                  Total Withdrawals
+                </p>
                 <p className="text-2xl font-bold text-gray-800">
-                  {stats.totalWithdrawals.toLocaleString('en-IL')} ILS
+                  {stats.totalWithdrawals.toLocaleString("en-IL")} ILS
                 </p>
               </div>
               <div className="p-3 bg-red-100 rounded-full">
@@ -176,16 +187,21 @@ export default function History() {
                 <p
                   className={`text-2xl font-bold ${
                     stats.totaldeposits - stats.totalWithdrawals >= 0
-                      ? 'text-green-600'
-                      : 'text-red-600'
+                      ? "text-green-600"
+                      : "text-red-600"
                   }`}
                 >
-                  {(stats.totaldeposits - stats.totalWithdrawals).toLocaleString('en-IL')} ILS
+                  {(
+                    stats.totaldeposits - stats.totalWithdrawals
+                  ).toLocaleString("en-IL")}{" "}
+                  ILS
                 </p>
               </div>
               <div
                 className={`p-3 rounded-full ${
-                  stats.totaldeposits - stats.totalWithdrawals >= 0 ? 'bg-green-100' : 'bg-red-100'
+                  stats.totaldeposits - stats.totalWithdrawals >= 0
+                    ? "bg-green-100"
+                    : "bg-red-100"
                 }`}
               >
                 {stats.totaldeposits - stats.totalWithdrawals >= 0 ? (
@@ -203,31 +219,31 @@ export default function History() {
           <div className="flex flex-col md:flex-row gap-4 md:items-center md:justify-between">
             <div className="flex flex-wrap gap-2">
               <button
-                onClick={() => setFilter('all')}
+                onClick={() => setFilter("all")}
                 className={`px-4 py-2 rounded-xl font-medium transition-colors ${
-                  filter === 'all'
-                    ? 'bg-indigo-500! text-white!'
-                    : 'bg-gray-100! text-gray-600! hover:bg-gray-200'
+                  filter === "all"
+                    ? "bg-indigo-500! text-white!"
+                    : "bg-gray-100! text-gray-600! hover:bg-gray-200"
                 }`}
               >
                 All Transactions
               </button>
               <button
-                onClick={() => setFilter('deposit')}
+                onClick={() => setFilter("deposit")}
                 className={`px-4 py-2 rounded-xl font-medium transition-colors ${
-                  filter === 'deposit'
-                    ? 'bg-green-500! text-white!'
-                    : 'bg-gray-100! text-gray-600! hover:bg-gray-200'
+                  filter === "deposit"
+                    ? "bg-green-500! text-white!"
+                    : "bg-gray-100! text-gray-600! hover:bg-gray-200"
                 }`}
               >
                 deposits
               </button>
               <button
-                onClick={() => setFilter('withdraw')}
+                onClick={() => setFilter("withdraw")}
                 className={`px-4 py-2 rounded-xl font-medium transition-colors ${
-                  filter === 'withdraw'
-                    ? 'bg-red-500! text-white!'
-                    : 'bg-gray-100! text-gray-600! hover:bg-gray-200'
+                  filter === "withdraw"
+                    ? "bg-red-500! text-white!"
+                    : "bg-gray-100! text-gray-600! hover:bg-gray-200"
                 }`}
               >
                 Withdrawals
@@ -260,12 +276,12 @@ export default function History() {
                     <div className="flex items-center space-x-4">
                       <div
                         className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                          transaction.type === 'deposit'
-                            ? 'bg-green-100 text-green-600'
-                            : 'bg-red-100 text-red-600'
+                          transaction.type === "deposit"
+                            ? "bg-green-100 text-green-600"
+                            : "bg-red-100 text-red-600"
                         }`}
                       >
-                        {transaction.type === 'deposit' ? (
+                        {transaction.type === "deposit" ? (
                           <TrendingUp className="w-6 h-6" />
                         ) : (
                           <TrendingDown className="w-6 h-6" />
@@ -276,13 +292,16 @@ export default function History() {
                           {transaction.type}
                         </p>
                         <p className="text-gray-500 text-sm">
-                          {new Date(transaction.date).toLocaleDateString('en-IL', {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric',
-                            hour: '2-digit',
-                            minute: '2-digit',
-                          })}
+                          {new Date(transaction.date).toLocaleDateString(
+                            "en-IL",
+                            {
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            }
+                          )}
                         </p>
                       </div>
                     </div>
@@ -290,17 +309,20 @@ export default function History() {
                     <div className="text-right">
                       <p
                         className={`text-xl font-bold ${
-                          transaction.type === 'deposit' ? 'text-green-600' : 'text-red-600'
+                          transaction.type === "deposit"
+                            ? "text-green-600"
+                            : "text-red-600"
                         }`}
                       >
-                        {transaction.type === 'deposit' ? '+' : '-'}
-                        {transaction.amount.toLocaleString('en-IL')} {transaction.currency}
+                        {transaction.type === "deposit" ? "+" : "-"}
+                        {transaction.amount.toLocaleString("en-IL")}{" "}
+                        {transaction.currency}
                       </p>
                       <p
                         className={`text-sm font-medium px-3 py-1 rounded-full ${
-                          transaction.type === 'deposit'
-                            ? 'bg-green-100 text-green-700'
-                            : 'bg-red-100 text-red-700'
+                          transaction.type === "deposit"
+                            ? "bg-green-100 text-green-700"
+                            : "bg-red-100 text-red-700"
                         }`}
                       >
                         {transaction.type}
@@ -315,11 +337,13 @@ export default function History() {
               <div className="w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Filter className="w-10 h-10 text-gray-400" />
               </div>
-              <h3 className="text-xl font-bold text-gray-600 mb-2">No transactions found</h3>
+              <h3 className="text-xl font-bold text-gray-600 mb-2">
+                No transactions found
+              </h3>
               <p className="text-gray-500">
                 {transactions.length === 0
                   ? "You haven't made any transactions yet."
-                  : 'No transactions match your current filters.'}
+                  : "No transactions match your current filters."}
               </p>
             </div>
           )}
@@ -329,8 +353,8 @@ export default function History() {
         {filteredTransactions.length > transactionsPerPage && (
           <div className="flex items-center justify-between bg-white rounded-2xl shadow-lg p-6">
             <div className="text-sm text-gray-600">
-              Showing {indexOfFirstTransaction + 1} to{' '}
-              {Math.min(indexOfLastTransaction, filteredTransactions.length)} of{' '}
+              Showing {indexOfFirstTransaction + 1} to{" "}
+              {Math.min(indexOfLastTransaction, filteredTransactions.length)} of{" "}
               {filteredTransactions.length} transactions
             </div>
 
@@ -345,19 +369,21 @@ export default function History() {
 
               {/* Page Numbers */}
               <div className="flex space-x-1">
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map((number) => (
-                  <button
-                    key={number}
-                    onClick={() => paginate(number)}
-                    className={`w-10 h-10 rounded-lg font-medium transition-colors ${
-                      currentPage === number
-                        ? 'bg-indigo-500 text-white'
-                        : 'border border-gray-300 text-gray-600 hover:bg-gray-50'
-                    }`}
-                  >
-                    {number}
-                  </button>
-                ))}
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                  (number) => (
+                    <button
+                      key={number}
+                      onClick={() => paginate(number)}
+                      className={`w-10 h-10 rounded-lg font-medium transition-colors ${
+                        currentPage === number
+                          ? "bg-indigo-500 text-white"
+                          : "border border-gray-300 text-gray-600 hover:bg-gray-50"
+                      }`}
+                    >
+                      {number}
+                    </button>
+                  )
+                )}
               </div>
 
               <button
